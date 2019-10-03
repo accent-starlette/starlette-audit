@@ -1,0 +1,35 @@
+{% extends "starlette_admin/base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-header">
+    {% include "starlette_admin/partials/breadcrumb.html" %}
+    <h1 class="f-lite">Deleted {{ collection_name }}</h1>
+    <table class="table table-headed">
+        <thead>
+            <tr>
+                <th>Entity ID</th>
+                <th>Known As</th>
+                <th>Deleted By</th>
+                <th>Deleted On</th>
+            </tr>
+        </thead>
+        <tbody>
+        {%- for item in list_objects -%}
+            <tr>
+                <td>{{ item.entity_type_id }}</td>
+                <td>{{ item.entity_name }}</td>
+                <td>{{ item.created_by or "-" }}</td>
+                <td>{{ item.created_on.strftime('%d %b %Y at %H:%M') }}</td>
+            </tr>
+        {%- endfor -%}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="px-0 py-1h" colspan="4">
+                    {{ list_objects|length }} record{% if list_objects|length != 1 %}s{% endif %}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}
