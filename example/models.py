@@ -1,5 +1,5 @@
-from starlette_audit.tables import Audited, AuditLogMixin
 import sqlalchemy as sa
+from starlette_audit.tables import Audited, AuditLogMixin
 from starlette_auth.tables import User
 from starlette_core.database import Base
 
