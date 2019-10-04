@@ -62,3 +62,6 @@ class Child(BaseAudited, Base):
     def __str__(self):
         return self.name
 ```
+
+When using starlette-admin instead of inheriting from `starlette_admin.admin.ModelAdmin` use
+`starlette_audit.admin.AuditedModelAdmin` for the additional views.
