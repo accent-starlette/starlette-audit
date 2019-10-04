@@ -1,10 +1,9 @@
+import decimal
 from datetime import datetime
 
 import sqlalchemy as sa
 from sqlalchemy import orm
 from starlette_core.middleware import get_request
-
-from .encoder import prepare_data
 
 operation_enum = sa.types.Enum("INSERT", "DELETE", "UPDATE", name="operation")
 
@@ -89,6 +88,40 @@ class Audited:
 
         raise NotImplementedError("should return the audit log class")
 
+    def audit_data(self):
+        """ Returns a dict of data to store in the audit log """
+
+        copied = self.__dict__.copy()
+        data_dict = dict()
+
+        for key in self.__mapper__.columns.keys():
+            value = copied.get(key)
+            if isinstance(value, decimal.Decimal):
+                value = str(value)
+            data_dict[key] = value
+
+        return data_dict
+
+    def audit_extra_data(self):
+        """
+        Returns extra data to store in the audit log such as the string value
+        of a relationship.
+
+        Possible uses could be to add arbitrary messages to the dict.
+        """
+
+        copied = self.__dict__.copy()
+
+        data_dict = dict(
+            [
+                (key, str(copied.get(key)))
+                for key in self.__mapper__.relationships.keys()
+                if key != "auditlog" and copied.get(key)
+            ]
+        )
+
+        return data_dict
+
 
 @sa.event.listens_for(Audited, "mapper_configured", propagate=True)
 def setup_listener(mapper, class_):
@@ -122,35 +155,23 @@ def setup_listener(mapper, class_):
 
 
 def add_auditlog_entry(mapper, connection, target, operation):
-    audit_log_table = mapper.relationships["auditlog"].target
-
-    copied = target.__dict__.copy()
-    data_dict = dict([(key, copied.get(key)) for key in mapper.columns.keys()])
-    data = prepare_data(data_dict)
-
-    extra_data = dict(
-        [
-            (key, str(copied.get(key)))
-            for key in mapper.relationships.keys()
-            if key != "auditlog" and copied.get(key)
-        ]
-    )
     request = get_request()
-
     user_id = None
     if request and "user" in request:
         user_id = getattr(request["user"], "id")
 
     connection.execute(
-        audit_log_table.insert().values(
+        mapper.relationships["auditlog"]
+        .target.insert()
+        .values(
             {
                 "entity_type": target.__class__.__table__.name,
                 "entity_type_id": target.id,
                 "entity_name": str(target),
                 "operation": operation,
                 "created_by_id": user_id,
-                "data": data,
-                "extra_data": extra_data,
+                "data": target.audit_data(),
+                "extra_data": target.audit_extra_data(),
             }
         )
     )
