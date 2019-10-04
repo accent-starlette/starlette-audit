@@ -14,6 +14,8 @@
 
 # Starlette Audit Log
 
+![Screenshot](/screenshot.png?raw=true "Screenshot using starlette-admin")
+
 Usage:
 
 ```python
