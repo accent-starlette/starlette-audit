@@ -26,7 +26,7 @@ class ParentForm(ModelForm):
         return Session()
 
 
-class ParentAdmin(ModelAdmin):
+class ParentAdmin(AuditedModelAdmin):
     section_name = "People"
     collection_name = "Parents"
     model_class = Parent

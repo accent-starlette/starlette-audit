@@ -11,15 +11,21 @@ class AuditedModelAdmin(ModelAdmin):
     audit_log_deleted_template: str = "starlette_audit/deleted_entries.html"
 
     @classmethod
+    def audit_log_class(cls):
+        return cls.model_class.audit_class()
+
+    @classmethod
     async def audit_log_deleted_view(cls, request):
         if not has_required_scope(request, cls.permission_scopes):
             raise HTTPException(403)
 
-        from starlette_audit import config as audit_config
-
-        list_objects = audit_config.audit_log_class.query.filter_by(
-            entity_type=cls.model_class.__table__.name, operation="DELETE"
-        ).all()
+        list_objects = (
+            cls.audit_log_class()
+            .query.filter_by(
+                entity_type=cls.model_class.__table__.name, operation="DELETE"
+            )
+            .all()
+        )
         context = cls.get_context(request)
         context.update({"list_objects": list_objects})
 
@@ -48,10 +54,8 @@ class AuditedModelAdmin(ModelAdmin):
 
         instance = cls.get_object(request)
 
-        from starlette_audit import config as audit_config
-
         item_id = request.path_params["item_id"]
-        item = audit_config.audit_log_class.query.get_or_404(item_id)
+        item = cls.audit_log_class().query.get_or_404(item_id)
 
         items = item.data_keys
         extra_items = item.extra_data_keys
@@ -59,7 +63,7 @@ class AuditedModelAdmin(ModelAdmin):
         diff = None
         diff_id = request.path_params.get("diff_id")
         if diff_id:
-            diff = audit_config.audit_log_class.query.get_or_404(diff_id)
+            diff = cls.audit_log_class().query.get_or_404(diff_id)
             items = sorted(list(set(items + diff.data_keys)))
             extra_items = sorted(list(set(extra_items + diff.extra_data_keys)))
 

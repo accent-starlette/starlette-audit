@@ -1,10 +1,10 @@
-from starlette_audit import config, tables
+from starlette_audit.tables import Audited, AuditLogMixin
 import sqlalchemy as sa
 from starlette_auth.tables import User
 from starlette_core.database import Base
 
 
-class AuditLog(tables.AuditLogMixin, Base):
+class AuditLog(AuditLogMixin, Base):
     created_by_id = sa.Column(sa.Integer, sa.ForeignKey(User.id), nullable=True)
     created_by = sa.orm.relationship(User)
 
@@ -17,17 +17,20 @@ class AuditLog(tables.AuditLogMixin, Base):
     )
 
 
-config.audit_log_class = AuditLog
+class BaseAudited(Audited):
+    @classmethod
+    def audit_class(cls):
+        return AuditLog
 
 
-class Parent(Base):
+class Parent(BaseAudited, Base):
     name = sa.Column(sa.String(), nullable=False, unique=True)
 
     def __str__(self):
         return self.name
 
 
-class Child(tables.Audited, Base):
+class Child(BaseAudited, Base):
     name = sa.Column(sa.String(), nullable=False, unique=True)
     parent_id = sa.Column(sa.Integer, sa.ForeignKey(Parent.id), nullable=True)
     age = sa.Column(sa.Integer, nullable=True)

@@ -40,15 +40,27 @@ class AuditLogMixin:
     created_by = None
 
     @property
+    def audited_instance(self):
+        """ Instance the audit log item belongs too """
+
+        return getattr(self, "audited_instance_%s" % self.entity_type)
+
+    @property
     def data_keys(self):
+        """ Returns a list of the keys in `self.data` """
+
         return sorted(self.data.keys())
 
     @property
     def extra_data_keys(self):
+        """ Returns a list of the keys in `self.extra_data` """
+
         return sorted(self.extra_data.keys())
 
     @property
     def history(self):
+        """ Returns all audit log entries prior to this record """
+
         return self.__class__.query.filter(
             self.__class__.entity_type == self.entity_type,
             self.__class__.entity_type_id == self.entity_type_id,
@@ -63,8 +75,19 @@ class Audited:
     of the audit log entry.
 
     class MyModel(Audited, Base):
-        pass
+        @classmethod
+        def audit_class(cls):
+            return MyAuditLog
     """
+
+    @classmethod
+    def audit_class(cls) -> "AuditLogMixin":
+        """
+        Should return the audit log class that will be used when tracking changes
+        for your `Audited` model.
+        """
+
+        raise NotImplementedError("should return the audit log class")
 
 
 @sa.event.listens_for(Audited, "mapper_configured", propagate=True)
@@ -76,21 +99,20 @@ def setup_listener(mapper, class_):
     of the audit log entry.
     """
 
-    from . import config
+    audit_log_class = class_.audit_class()
 
-    audit_log_class = config.audit_log_class
-
-    name = class_.__name__
-    entity_type = name.lower()
+    assert issubclass(
+        audit_log_class, AuditLogMixin
+    ), f"{class_}.audit_class should return a subclass of 'AuditLogMixin'"
 
     class_.auditlog = orm.relationship(
         audit_log_class,
         primaryjoin=sa.and_(
             class_.id == orm.foreign(orm.remote(audit_log_class.entity_type_id)),
-            audit_log_class.entity_type == entity_type,
+            audit_log_class.entity_type == class_.__table__.name,
         ),
         backref=orm.backref(
-            "audited_instance",
+            "audited_instance_%s" % class_.__table__.name,
             primaryjoin=orm.remote(class_.id)
             == orm.foreign(audit_log_class.entity_type_id),
         ),
@@ -100,9 +122,7 @@ def setup_listener(mapper, class_):
 
 
 def add_auditlog_entry(mapper, connection, target, operation):
-    from . import config
-
-    audit_log_class = config.audit_log_class
+    audit_log_table = mapper.relationships["auditlog"].target
 
     copied = target.__dict__.copy()
     data_dict = dict([(key, copied.get(key)) for key in mapper.columns.keys()])
@@ -122,7 +142,7 @@ def add_auditlog_entry(mapper, connection, target, operation):
         user_id = getattr(request["user"], "id")
 
     connection.execute(
-        audit_log_class.__table__.insert().values(
+        audit_log_table.insert().values(
             {
                 "entity_type": target.__class__.__table__.name,
                 "entity_type_id": target.id,

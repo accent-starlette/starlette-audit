@@ -4,7 +4,6 @@ from starlette_auth.tables import User
 from starlette_core.database import Base
 from starlette_core.testing import assert_model_field
 
-from starlette_audit import config
 from starlette_audit.tables import Audited, AuditLogMixin
 
 
@@ -15,11 +14,12 @@ class AuditLog(AuditLogMixin, Base):
     __table_args__ = (sa.Index("ix_auditlog_ctype", "entity_type", "entity_type_id"),)
 
 
-config.audit_log_class = AuditLog
-
-
 class MyModel(Audited, Base):
     name = sa.Column(sa.String(50))
+
+    @classmethod
+    def audit_class(cls):
+        return AuditLog
 
 
 def test_fields():
