@@ -57,7 +57,17 @@ class AuditLogMixin:
         return sorted(self.extra_data.keys())
 
     @property
-    def history(self):
+    def later_records(self):
+        """ Returns all audit log entries after to this record """
+
+        return self.__class__.query.filter(
+            self.__class__.entity_type == self.entity_type,
+            self.__class__.entity_type_id == self.entity_type_id,
+            self.__class__.created_on > self.created_on,
+        ).order_by(sa.desc(self.__class__.created_on))
+
+    @property
+    def prior_records(self):
         """ Returns all audit log entries prior to this record """
 
         return self.__class__.query.filter(

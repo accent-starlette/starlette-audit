@@ -12,7 +12,7 @@ from starlette_core.database import Database, DatabaseURL
 from starlette_core.middleware import DatabaseMiddleware
 from starlette_core.templating import Jinja2Templates
 
-from .admin import ChildAdmin, ParentAdmin
+from .admin import AuditAdmin, ChildAdmin, ParentAdmin
 
 DEBUG = True
 
@@ -42,6 +42,7 @@ adminsite = AdminSite(name="admin", permission_scopes=[])
 # register admins
 adminsite.register(ChildAdmin)
 adminsite.register(ParentAdmin)
+adminsite.register(AuditAdmin)
 
 # create app
 app = Starlette(debug=DEBUG)

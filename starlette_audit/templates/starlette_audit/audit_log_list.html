@@ -1,0 +1,42 @@
+{% extends "starlette_admin/base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-header">
+    {% include "starlette_admin/partials/breadcrumb.html" %}
+    <h1 class="f-lite">{{ collection_name }}</h1>
+    {% if search_enabled %}
+        {% from "starlette_admin/helpers/_list_helpers.html" import render_search_form %}
+        {{ render_search_form(search) }}
+    {% endif %}
+    <table class="table table-headed">
+        <thead>
+            <tr>
+                <th>Operation</th>
+                <th>Entity Type</th>
+                <th>Entity Name</th>
+                <th>Created By</th>
+                <th>Created On</th>
+            </tr>
+        </thead>
+        <tbody>
+        {%- for item in list_objects -%}
+            <tr>
+                <td><a href="{{ url_for(url_names.audit_item, item_id=item.id) }}">{{ item.operation }}</a></td>
+                <td>{{ item.entity_type }}</td>
+                <td>{{ item.entity_name }}</td>
+                <td>{{ item.created_by or "-" }}</td>
+                <td>{{ item.created_on.strftime('%d %b %Y at %H:%M') }}</td>
+            </tr>
+        {%- endfor -%}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="px-0 py-1h" colspan="5">
+                    {{ list_objects|length }} record{% if list_objects|length != 1 %}s{% endif %}
+                    <small><em>( Limited to the first {{ limit }} records )</em></small>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock %}

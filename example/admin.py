@@ -4,12 +4,12 @@ from starlette.exceptions import HTTPException
 from starlette.responses import RedirectResponse
 from starlette.routing import Route, Router
 from starlette_admin.admin import ModelAdmin
-from starlette_audit.admin import AuditedModelAdmin
+from starlette_audit.admin import AuditedModelAdmin, AuditLogAdmin
 from wtforms import fields, form, validators
 from wtforms_alchemy import ModelForm
 from wtforms_alchemy.fields import QuerySelectField
 
-from .models import Child, Parent
+from .models import AuditLog, Child, Parent
 
 
 # objects using the model admin
@@ -84,3 +84,9 @@ class ChildAdmin(AuditedModelAdmin):
                 Child.description.like(f"%{term}%")
             )
         )
+
+
+class AuditAdmin(AuditLogAdmin):
+    section_name = "Audit"
+    collection_name = "Audit Log Viewer"
+    audit_log_class = AuditLog

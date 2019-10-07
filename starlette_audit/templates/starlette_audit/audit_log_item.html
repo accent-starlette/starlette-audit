@@ -3,7 +3,6 @@
 {% block content %}
 <div class="container-fluid mt-header">
     {% include "starlette_admin/partials/breadcrumb.html" %}
-    <a href="{{ url_for(url_names.audit, id=object.id) }}" class="button button-primary button-outline pull-right">Audit Log</a>
     <h1 class="f-lite">Audit Log Entry</h1>
     <div class="row">
         <div class="col-12 col-lg-9">
@@ -74,17 +73,20 @@
             {% endif %}
         </div>
         <div class="col-12 col-lg-3">
+            
             <div class="panel mt-0 b-seashell">
                 <h3>Compare To Historic Changes</h3>
-                <ul class="list-style-none">
+                <ul class="list-style-none mb-0">
                     {% for hist in item.prior_records %}
                         <li class="mb-h">
-                            <a href="{{ url_for(url_names.audit_item_diff, id=object.id, item_id=item.id, diff_id=hist.id) }}">
+                            <a href="{{ url_for(url_names.audit_item_diff, item_id=item.id, diff_id=hist.id) }}">
                                 {% if diff.id == hist.id %}<i class="pull-right icon-ok-circled c-olive"></i>{% endif %}
                                 {{ hist.operation }}<br>
                                 <small>{{ hist.created_on.strftime('%d %b %Y at %H:%M') }}</small>
                             </a>
                         </li>
+                    {% else %}
+                        <li class="muted">No older records to compare to ...</li>
                     {% endfor %}
                 </ul>
                 <hr>
@@ -92,7 +94,7 @@
                 <ul class="list-style-none mb-0">
                     {% for future in item.later_records %}
                         <li class="mb-h">
-                            <a href="{{ url_for(url_names.audit_item_diff, id=object.id, item_id=future.id, diff_id=item.id) }}">
+                            <a href="{{ url_for(url_names.audit_item_diff, item_id=future.id, diff_id=item.id) }}">
                                 {{ future.operation }}<br>
                                 <small>{{ future.created_on.strftime('%d %b %Y at %H:%M') }}</small>
                             </a>
@@ -102,6 +104,7 @@
                     {% endfor %}
                 </ul>
             </div>
+
         </div>
     </div>
     
