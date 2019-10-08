@@ -115,10 +115,13 @@ class Audited:
         data_dict = dict()
 
         for key in self.__mapper__.columns.keys():
+            #  exclude the field if required
             if key in self.excluded_columns:
                 continue
 
             value = copied.get(key)
+
+            # make the value json serializable
             if isinstance(value, Decimal):
                 value = str(value)
             elif isinstance(value, datetime):
@@ -146,9 +149,19 @@ class Audited:
 
         for field in related:
             try:
-                if field == "auditlog" or field in self.excluded_columns:
+                #  exclude the field if required
+                if field in self.excluded_columns:
                     continue
+
                 value = copied.get(field) or getattr(self, field)
+
+                # dont store the value if its a list of entities
+                # or its None
+                if value is None:
+                    continue
+                elif isinstance(value, list):
+                    continue
+
                 data_dict[field] = str(value)
             except:
                 continue
