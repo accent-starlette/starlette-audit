@@ -1,3 +1,4 @@
+import typing
 from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum
@@ -90,9 +91,13 @@ class Audited:
 
     `Audited.manage_audit_manually` can be set to `True` to disable auto logging data
     to the audit log. This will enable you to add them yourself.
+
+    `Audited.excluded_columns` can be set to a list of column
+    names or relationship names you want to be excluded from collecting any data.
     """
 
     manage_audit_manually: bool = False
+    excluded_columns: typing.List[str] = []
 
     @classmethod
     def audit_class(cls) -> "AuditLogMixin":
@@ -110,8 +115,10 @@ class Audited:
         data_dict = dict()
 
         for key in self.__mapper__.columns.keys():
-            value = copied.get(key)
+            if key in self.excluded_columns:
+                continue
 
+            value = copied.get(key)
             if isinstance(value, Decimal):
                 value = str(value)
             elif isinstance(value, datetime):
@@ -139,7 +146,7 @@ class Audited:
 
         for field in related:
             try:
-                if field == "auditlog":
+                if field == "auditlog" or field in self.excluded_columns:
                     continue
                 value = copied.get(field) or getattr(self, field)
                 data_dict[field] = str(value)
