@@ -1,5 +1,5 @@
-import decimal
-from datetime import datetime
+from datetime import date, datetime
+from decimal import Decimal
 
 import sqlalchemy as sa
 from sqlalchemy import orm
@@ -104,7 +104,11 @@ class Audited:
 
         for key in self.__mapper__.columns.keys():
             value = copied.get(key)
-            if isinstance(value, decimal.Decimal):
+            if isinstance(value, Decimal):
+                value = str(value)
+            elif isinstance(value, datetime):
+                value = str(value)
+            elif isinstance(value, date):
                 value = str(value)
             data_dict[key] = value
 
