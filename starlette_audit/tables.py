@@ -122,15 +122,18 @@ class Audited:
         Possible uses could be to add arbitrary messages to the dict.
         """
 
+        data_dict = dict()
         copied = self.__dict__.copy()
+        related = self.__mapper__.relationships.keys()
 
-        data_dict = dict(
-            [
-                (key, str(copied.get(key)))
-                for key in self.__mapper__.relationships.keys()
-                if key != "auditlog" and copied.get(key)
-            ]
-        )
+        for field in related:
+            try:
+                if field == "auditlog":
+                    continue
+                value = copied.get(field) or getattr(self, field)
+                data_dict[field] = str(value)
+            except:
+                continue
 
         return data_dict
 
