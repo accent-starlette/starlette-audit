@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import sqlalchemy as sa
 from sqlalchemy import orm
+from sqlalchemy.sql.expression import cast
 from starlette_core.middleware import get_request
 
 
@@ -161,12 +162,13 @@ def setup_listener(mapper, class_):
     class_.auditlog = orm.relationship(
         audit_log_class,
         primaryjoin=sa.and_(
-            class_.id == orm.foreign(orm.remote(audit_log_class.entity_type_id)),
+            cast(class_.id, sa.String)
+            == orm.foreign(orm.remote(audit_log_class.entity_type_id)),
             audit_log_class.entity_type == class_.__table__.name,
         ),
         backref=orm.backref(
             "audited_instance_%s" % class_.__table__.name,
-            primaryjoin=orm.remote(class_.id)
+            primaryjoin=orm.remote(cast(class_.id, sa.String))
             == orm.foreign(audit_log_class.entity_type_id),
         ),
         order_by=sa.desc(audit_log_class.created_on),
