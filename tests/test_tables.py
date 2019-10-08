@@ -25,7 +25,7 @@ class MyModel(Audited, Base):
 def test_fields():
     assert_model_field(AuditLog, "entity_type", sa.String, False, False, False, 255)
     assert_model_field(AuditLog, "entity_type_id", sa.String, False, False, False, 50)
-    assert_model_field(AuditLog, "operation", sa.types.Enum, False, True, False)
+    assert_model_field(AuditLog, "operation", sa.String, False, True, False, 10)
     assert_model_field(AuditLog, "created_on", sa.DateTime, False, False, False)
     assert_model_field(AuditLog, "created_by_id", sa.Integer, True, False, False)
     assert_model_field(AuditLog, "data", sa.types.JSON, True, False, False)

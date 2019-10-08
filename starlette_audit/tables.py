@@ -5,8 +5,6 @@ import sqlalchemy as sa
 from sqlalchemy import orm
 from starlette_core.middleware import get_request
 
-operation_enum = sa.types.Enum("INSERT", "DELETE", "UPDATE", name="operation")
-
 
 class AuditLogMixin:
     """
@@ -29,7 +27,7 @@ class AuditLogMixin:
     entity_type = sa.Column(sa.String(255), nullable=False)
     entity_type_id = sa.Column(sa.String(50), nullable=False)
     entity_name = sa.Column(sa.String(255), nullable=False)
-    operation = sa.Column(operation_enum, nullable=False, index=True)
+    operation = sa.Column(sa.String(10), nullable=False, index=True)
     created_on = sa.Column(sa.DateTime, nullable=False, default=datetime.utcnow)
     data = sa.Column(sa.types.JSON)
     extra_data = sa.Column(sa.types.JSON)
