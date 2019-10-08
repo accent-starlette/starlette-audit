@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from decimal import Decimal
+from enum import Enum
 
 import sqlalchemy as sa
 from sqlalchemy import orm
@@ -110,12 +111,16 @@ class Audited:
 
         for key in self.__mapper__.columns.keys():
             value = copied.get(key)
+
             if isinstance(value, Decimal):
                 value = str(value)
             elif isinstance(value, datetime):
                 value = str(value)
             elif isinstance(value, date):
                 value = str(value)
+            elif isinstance(value, Enum):
+                value = value.name
+
             data_dict[key] = value
 
         return data_dict
