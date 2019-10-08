@@ -85,7 +85,12 @@ class Audited:
         @classmethod
         def audit_class(cls):
             return MyAuditLog
+
+    `Audited.manage_audit_manually` can be set to `True` to disable auto logging data
+    to the audit log. This will enable you to add them yourself.
     """
+
+    manage_audit_manually: bool = False
 
     @classmethod
     def audit_class(cls) -> "AuditLogMixin":
@@ -180,7 +185,7 @@ def add_auditlog_entry(mapper, connection, target, operation):
         .target.insert()
         .values(
             {
-                "entity_type": target.__class__.__table__.name,
+                "entity_type": mapper.class_.__table__.name,
                 "entity_type_id": target.id,
                 "entity_name": str(target),
                 "operation": operation,
@@ -194,14 +199,17 @@ def add_auditlog_entry(mapper, connection, target, operation):
 
 @sa.event.listens_for(Audited, "after_insert", propagate=True)
 def receive_after_insert(mapper, connection, target):
-    add_auditlog_entry(mapper, connection, target, "INSERT")
+    if not mapper.class_.manage_audit_manually:
+        add_auditlog_entry(mapper, connection, target, "INSERT")
 
 
 @sa.event.listens_for(Audited, "after_update", propagate=True)
 def receive_after_update(mapper, connection, target):
-    add_auditlog_entry(mapper, connection, target, "UPDATE")
+    if not mapper.class_.manage_audit_manually:
+        add_auditlog_entry(mapper, connection, target, "UPDATE")
 
 
 @sa.event.listens_for(Audited, "after_delete", propagate=True)
 def receive_after_delete(mapper, connection, target):
-    add_auditlog_entry(mapper, connection, target, "DELETE")
+    if not mapper.class_.manage_audit_manually:
+        add_auditlog_entry(mapper, connection, target, "DELETE")
