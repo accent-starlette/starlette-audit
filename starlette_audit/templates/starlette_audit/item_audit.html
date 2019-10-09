@@ -13,11 +13,11 @@
                         <tr>
                             <td style="width: 33.3%"></td>
                             <td style="width: 33.3%">
-                                {{ diff.operation }}<br>
+                                {{ diff.operation }}  <small class="muted">{{ diff.entity_type }}</small><br/>
                                 <small>by {{ diff.created_by or "Unknown" }} on {{ diff.created_on.strftime('%d %b %Y at %H:%M') }}</small>
                             </td>
                             <td style="width: 33.3%">
-                                {{ item.operation }}<br>
+                                {{ item.operation }}  <small class="muted">{{ item.entity_type }}</small><br/>
                                 <small>by {{ item.created_by or "Unknown" }} on {{ item.created_on.strftime('%d %b %Y at %H:%M') }}</small>
                             </td>
                         </tr>
@@ -53,7 +53,7 @@
                         <tr>
                             <td style="width: 33.3%"></td>
                             <td>
-                                {{ item.operation }}<br>
+                                {{ item.operation }}  <small class="muted">{{ item.entity_type }}</small><br/>
                                 <small>by {{ item.created_by or "Unknown" }} on {{ item.created_on.strftime('%d %b %Y at %H:%M') }}</small>
                             </td>
                         </tr>
