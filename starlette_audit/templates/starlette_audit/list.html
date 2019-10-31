@@ -7,7 +7,7 @@
         <a href="{{ url_for(url_names.audit_deleted) }}" class="button button-primary button-outline">Deleted</a>
         <a href="{{ url_for(url_names.create) }}" class="button button-primary">New Record</a>
     </div>
-    <h1 class="f-lite">{{ collection_name }}</h1>
+    <h1>{{ collection_name }}</h1>
     {% if search_enabled %}
         {% from "starlette_admin/helpers/_list_helpers.html" import render_search_form %}
         {{ render_search_form(search) }}
