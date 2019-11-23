@@ -14,7 +14,13 @@
 
 # Starlette Audit Log
 
-![Screenshot](/screenshot.png?raw=true "Screenshot using starlette-admin")
+Audit log for sqlalchemy. Views provided for [starlette-admin](https://github.com/accent-starlette/starlette-admin).
+
+## Screenshots
+
+![Screenshot 1](/screenshots/screenshot_1.png?raw=true)
+![Screenshot 2](/screenshots/screenshot_2.png?raw=true)
+![Screenshot 3](/screenshots/screenshot_3.png?raw=true)
 
 Usage:
 
