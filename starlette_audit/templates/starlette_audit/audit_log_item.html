@@ -22,7 +22,7 @@
                         </tr>
                         {% for key in items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-95">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
                             {% if diff.data.get(key, "-") != item.data.get(key, "-") %}
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-red c-white px-h">{{ diff.data.get(key, "-") or "-" }}</span></td>
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-olive c-white px-h">{{ item.data.get(key, "-") or "-" }}</span></td>
@@ -34,7 +34,7 @@
                         {% endfor %}
                         {% for key in extra_items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-95">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
                             {% if diff.extra_data.get(key, "-") != item.extra_data.get(key, "-") %}
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-red c-white px-h">{{ diff.extra_data.get(key, "-") or "-" }}</span></td>
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-olive c-white px-h">{{ item.extra_data.get(key, "-") or "-" }}</span></td>
@@ -58,13 +58,13 @@
                         </tr>
                         {% for key in items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-95">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
                             <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}>{{ item.data.get(key, "-") or "-" }}</td>
                         </tr>
                         {% endfor %}
                         {% for key in extra_items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-95">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
                             <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}>{{ item.extra_data.get(key, "-") or "-" }}</td>
                         </tr>
                         {% endfor %}
@@ -74,7 +74,7 @@
         </div>
         <div class="col-12 col-lg-3">
             
-            <div class="panel mt-0 b-blacksqueeze-95">
+            <div class="panel">
                 <h3>Compare To Historic Changes</h3>
                 <ul class="list-style-none mb-0">
                     {% for hist in item.prior_records %}
