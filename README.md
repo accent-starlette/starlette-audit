@@ -8,7 +8,7 @@
 
 ---
 
-**Documentation**: [https://accent-starlette.github.io/](https://accent-starlette.github.io/)
+**Documentation**: [https://accent-starlette.github.io/starlette-audit/](https://accent-starlette.github.io/starlette-audit/)
 
 ---
 

@@ -1,0 +1,16 @@
+site_name: Starlette Audit
+site_description: Starlette Audit Documentation.
+
+theme:
+    name: 'material'
+
+repo_name: accent-starlette/starlette-audit
+repo_url: https://github.com/accent-starlette/starlette-audit
+edit_uri: ""
+
+nav:
+    - Introduction: 'index.md'
+
+markdown_extensions:
+  - markdown.extensions.codehilite:
+      guess_lang: false
