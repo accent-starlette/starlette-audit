@@ -5,5 +5,5 @@
 *.sqlite3
 .idea
 .mypy_cache
-htmlcov
+coverage.xml
 node_modules

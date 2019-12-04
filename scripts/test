@@ -2,7 +2,7 @@
 
 set -x
 
-pytest --cov=starlette_audit --cov-report html
+pytest --cov=starlette_audit --cov-report=xml
 mypy starlette_audit --ignore-missing-imports
 autoflake --recursive --remove-unused-variables starlette_audit tests
 black starlette_audit tests --check
