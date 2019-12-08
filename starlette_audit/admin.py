@@ -99,7 +99,7 @@ class AuditedModelAdmin(ModelAdmin):
         routes = super().routes()
         mount = cls.mount_name()
         routes.add_route(
-            path="/{id:int}/audit",
+            path="/{id}/audit",
             endpoint=cls.audit_log_view,
             methods=["GET"],
             name=f"{mount}_audit",
@@ -111,13 +111,13 @@ class AuditedModelAdmin(ModelAdmin):
             name=f"{mount}_audit_deleted",
         )
         routes.add_route(
-            path="/{id:int}/audit/{item_id:int}",
+            path="/{id}/audit/{item_id}",
             endpoint=cls.audit_log_item_view,
             methods=["GET"],
             name=f"{mount}_audit_item",
         )
         routes.add_route(
-            path="/{id:int}/audit/{item_id:int}/diff/{diff_id:int}",
+            path="/{id}/audit/{item_id}/diff/{diff_id}",
             endpoint=cls.audit_log_item_view,
             methods=["GET"],
             name=f"{mount}_audit_item_diff",
@@ -211,13 +211,13 @@ class AuditLogAdmin(BaseAdmin):
                     "/", endpoint=cls.list_view, methods=["GET"], name=f"{mount}_list"
                 ),
                 Route(
-                    "/{item_id:int}",
+                    "/{item_id}",
                     endpoint=cls.audit_log_item_view,
                     methods=["GET"],
                     name=f"{mount}_audit_item",
                 ),
                 Route(
-                    "/{item_id:int}/diff/{diff_id:int}",
+                    "/{item_id}/diff/{diff_id}",
                     endpoint=cls.audit_log_item_view,
                     methods=["GET"],
                     name=f"{mount}_audit_item_diff",
