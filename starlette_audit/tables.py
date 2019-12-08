@@ -2,6 +2,7 @@ import typing
 from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum
+from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy import orm
@@ -130,6 +131,8 @@ class Audited:
                 value = str(value)
             elif isinstance(value, Enum):
                 value = value.name
+            elif isinstance(value, UUID):
+                value = str(value)
 
             data_dict[key] = value
 
