@@ -1,3 +1,4 @@
+[![Sourcery](https://img.shields.io/badge/Sourcery-refactored-blueviolet.svg)](https://sourcery.ai)
 ![](https://github.com/accent-starlette/starlette-audit/workflows/Testing%20Workflow/badge.svg?branch=master)
 ![](https://github.com/accent-starlette/starlette-audit/workflows/Deploy%20to%20GitHub%20Pages/badge.svg?branch=master)
 ![](https://codecov.io/gh/accent-starlette/starlette-audit/branch/master/graph/badge.svg)
