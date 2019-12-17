@@ -113,8 +113,7 @@ class Audited:
         """ Returns a dict of data to store in the audit log """
 
         copied = self.__dict__.copy()
-        data_dict = dict()
-
+        data_dict = {}
         for key in self.__mapper__.columns.keys():
             #  exclude the field if required
             if key in self.excluded_columns:
@@ -123,16 +122,17 @@ class Audited:
             value = copied.get(key)
 
             # make the value json serializable
-            if isinstance(value, Decimal):
-                value = str(value)
-            elif isinstance(value, datetime):
-                value = str(value)
-            elif isinstance(value, date):
+            if any(
+                [
+                    isinstance(value, Decimal),
+                    isinstance(value, datetime),
+                    isinstance(value, date),
+                    isinstance(value, UUID),
+                ]
+            ):
                 value = str(value)
             elif isinstance(value, Enum):
                 value = value.name
-            elif isinstance(value, UUID):
-                value = str(value)
 
             data_dict[key] = value
 
@@ -146,7 +146,7 @@ class Audited:
         Possible uses could be to add arbitrary messages to the dict.
         """
 
-        data_dict = dict()
+        data_dict = {}
         copied = self.__dict__.copy()
         related = self.__mapper__.relationships.keys()
 
