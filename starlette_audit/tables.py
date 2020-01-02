@@ -210,6 +210,10 @@ def add_auditlog_entry(mapper, connection, target, operation):
     if request and "user" in request:
         user_id = getattr(request["user"], "id")
 
+    # ensure entity name is no longer than 255 chars
+    target_str = str(target)
+    entity_name = (target_str[:253] + "..") if len(target_str) > 253 else target_str
+
     connection.execute(
         mapper.relationships["auditlog"]
         .target.insert()
@@ -217,7 +221,7 @@ def add_auditlog_entry(mapper, connection, target, operation):
             {
                 "entity_type": mapper.class_.__table__.name,
                 "entity_type_id": target.id,
-                "entity_name": str(target),
+                "entity_name": entity_name,
                 "operation": operation,
                 "created_by_id": user_id,
                 "data": target.audit_data(),
