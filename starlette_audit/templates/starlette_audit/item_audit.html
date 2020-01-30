@@ -2,15 +2,17 @@
 
 {% block content %}
 <div class="container-fluid mt-header">
-    {% include "starlette_admin/partials/breadcrumb.html" %}
-    <a href="{{ url_for(url_names.audit, id=object.id) }}" class="button button-primary button-outline pull-right">Audit Log</a>
     <h1>Audit Log Entry</h1>
+    {% include "starlette_admin/partials/breadcrumb.html" %}
+    <div class="action-bar">
+        <a href="{{ url_for(url_names.audit, id=object.id) }}" class="button button-secondary ml-auto">Audit Log</a>
+    </div>
     <div class="row">
         <div class="col-12 col-lg-9">
             {% if diff %}
                 <table class="table table-headed">
                     <tbody>
-                        <tr>
+                        <tr class="b-blacksqueeze-darken-5">
                             <td style="width: 33.3%"></td>
                             <td style="width: 33.3%">
                                 {{ diff.operation }}  <small class="muted">{{ diff.entity_type }}</small><br/>
@@ -50,7 +52,7 @@
             {% else %}
                 <table class="table table-headed">
                     <tbody>
-                        <tr>
+                        <tr class="b-blacksqueeze-darken-5">
                             <td style="width: 33.3%"></td>
                             <td>
                                 {{ item.operation }}  <small class="muted">{{ item.entity_type }}</small><br/>

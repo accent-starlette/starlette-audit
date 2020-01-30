@@ -2,12 +2,14 @@
 
 {% block content %}
 <div class="container-fluid mt-header">
-    {% include "starlette_admin/partials/breadcrumb.html" %}
     <h1>{{ collection_name }}</h1>
-    {% if search_enabled %}
-        {% from "starlette_admin/helpers/_list_helpers.html" import render_search_form %}
-        {{ render_search_form(search) }}
-    {% endif %}
+    {% include "starlette_admin/partials/breadcrumb.html" %}
+    <div class="action-bar">
+        {% if search_enabled %}
+            {% from "starlette_admin/helpers/_list_helpers.html" import render_search_form %}
+            {{ render_search_form(search) }}
+        {% endif %}
+    </div>
     <table class="table table-headed">
         <thead>
             <tr>
