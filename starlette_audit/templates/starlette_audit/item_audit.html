@@ -5,14 +5,14 @@
     <h1>Audit Log Entry</h1>
     {% include "starlette_admin/partials/breadcrumb.html" %}
     <div class="action-bar">
-        <a href="{{ url_for(url_names.audit, id=object.id) }}" class="button button-secondary">Audit Log</a>
+        <a href="{{ url_for(url_names.audit, id=object.id) }}" class="button button-primary button-clear">Audit Log</a>
     </div>
     <div class="row">
         <div class="col-12 col-lg-9">
             {% if diff %}
                 <table class="table table-headed">
                     <tbody>
-                        <tr class="b-blacksqueeze-darken-5">
+                        <tr class="b-secondary">
                             <td style="width: 33.3%"></td>
                             <td style="width: 33.3%">
                                 {{ diff.operation }}  <small class="muted">{{ diff.entity_type }}</small><br/>
@@ -25,9 +25,9 @@
                         </tr>
                         {% for key in items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-secondary">{{ key }}</td>
                             {% if diff.data.get(key, "-") != item.data.get(key, "-") %}
-                                <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-red c-white px-h">{{ diff.data.get(key, "-") }}</span></td>
+                                <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-chilli c-white px-h">{{ diff.data.get(key, "-") }}</span></td>
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-olive c-white px-h">{{ item.data.get(key, "-") }}</span></td>
                             {% else %}
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}>{{ diff.data.get(key, "-") }}</td>
@@ -37,9 +37,9 @@
                         {% endfor %}
                         {% for key in extra_items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-secondary">{{ key }}</td>
                             {% if diff.extra_data.get(key, "-") != item.extra_data.get(key, "-") %}
-                                <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-red c-white px-h">{{ diff.extra_data.get(key, "-") }}</span></td>
+                                <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-chilli c-white px-h">{{ diff.extra_data.get(key, "-") }}</span></td>
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}><span class="b-olive c-white px-h">{{ item.extra_data.get(key, "-") }}</span></td>
                             {% else %}
                                 <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}>{{ diff.extra_data.get(key, "-") }}</td>
@@ -52,7 +52,7 @@
             {% else %}
                 <table class="table table-headed">
                     <tbody>
-                        <tr class="b-blacksqueeze-darken-5">
+                        <tr class="b-secondary">
                             <td style="width: 33.3%"></td>
                             <td>
                                 {{ item.operation }}  <small class="muted">{{ item.entity_type }}</small><br/>
@@ -61,13 +61,13 @@
                         </tr>
                         {% for key in items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-secondary">{{ key }}</td>
                             <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}>{{ item.data.get(key, "-") }}</td>
                         </tr>
                         {% endfor %}
                         {% for key in extra_items %}
                         <tr>
-                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-blacksqueeze-darken-5">{{ key }}</td>
+                            <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %} class="b-secondary">{{ key }}</td>
                             <td {% if loop.index == 1 %}style="border-top-width: 3px;"{% endif %}>{{ item.extra_data.get(key, "-") }}</td>
                         </tr>
                         {% endfor %}

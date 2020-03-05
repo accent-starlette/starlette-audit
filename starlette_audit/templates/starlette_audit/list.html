@@ -9,8 +9,8 @@
             {% from "starlette_admin/helpers/_list_helpers.html" import render_search_form %}
             {{ render_search_form(search) }}
         {% endif %}
-        <a href="{{ url_for(url_names.audit_deleted) }}" class="button button-secondary">View Deleted</a>
-        <a href="{{ url_for(url_names.create) }}" class="button button-secondary">New Record</a>
+        <a href="{{ url_for(url_names.audit_deleted) }}" class="button button-primary button-clear">View Deleted</a>
+        <a href="{{ url_for(url_names.create) }}" class="button button-primary">New Record</a>
     </div>
     {% include "starlette_admin/partials/table.html" %}
 </div>

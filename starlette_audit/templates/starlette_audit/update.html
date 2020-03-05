@@ -5,7 +5,7 @@
     <h1>Update</h1>
     {% include "starlette_admin/partials/breadcrumb.html" %}
     <div class="action-bar">
-        <a href="{{ url_for(url_names.audit, id=object.id) }}" class="button button-secondary">Audit Log</a>
+        <a href="{{ url_for(url_names.audit, id=object.id) }}" class="button button-primary button-clear">Audit Log</a>
     </div>
     {% with button_name='update', show_delete_link=True %}
     {% include "starlette_admin/partials/form.html" %}
