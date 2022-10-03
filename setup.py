@@ -65,9 +65,9 @@ setup(
     packages=get_packages(package_name),
     package_data=get_package_data(package_name),
     install_requires=[
-        'starlette-admin @ git+https://github.com/accent-starlette/starlette-admin@master',
-        'starlette-auth @ git+https://github.com/accent-starlette/starlette-auth@master',
-        'starlette-core @ git+https://github.com/accent-starlette/starlette-core@master'
+        'starlette-admin @ http://github.com/accent-starlette/starlette-admin/tarball/master#egg=starlette-admin',
+        'starlette-auth @ http://github.com/accent-starlette/starlette-auth/tarball/master#egg=starlette-auth',
+        'starlette-core @ http://github.com/accent-starlette/starlette-core/tarball/master#egg=starlette-core'
     ],
     extras_require={
         "docs": [
